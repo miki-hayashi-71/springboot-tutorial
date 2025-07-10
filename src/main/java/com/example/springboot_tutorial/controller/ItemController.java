@@ -21,14 +21,20 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    // アイテム一覧を取得するAPI （GET /items）
+    /**
+     * アイテム一覧を取得するAPI
+     * GET /items
+     */
     @GetMapping
     public List<Item> getItems() {
         // Serviceを呼び出して全アイテムを取得
         return itemService.findAll();
     }
 
-    // IDを指定してアイテムを取得するAPI (GET /items/{id})
+    /**
+     * IDを指定してアイテムを1件取得するAPI
+     * GET /items/{id}
+     */
     @GetMapping("/{id}")
     public Item getItemById(@PathVariable Long id) { // @PathVariableでURLの{id}を受け取る
         return itemService.findById(id);
