@@ -17,12 +17,19 @@ public class ItemService {
         this.itemRepository = itemRepository;
     }
 
-    // DBから全件取得
+    /**
+     * DBからアイテム一覧を取得
+     * GET /items
+     */
     public List<Item> findAll() {
         return itemRepository.findAll();
     }
 
-    // IDを指定して1件取得するメソッド（なければnullを返す）
+    /**
+     * IDを指定してアイテムを1件取得
+     * なけれなnullを返す
+     * GET /items/{id}
+     */
     public Item findById(Long id) {
         return itemRepository.findById(id).orElse(null);
     }
@@ -35,4 +42,6 @@ public class ItemService {
     public Item createItem(Item item) {
         return itemRepository.save(item); // saveはIDがなければINSERTを実行する
     }
+
+
 }
