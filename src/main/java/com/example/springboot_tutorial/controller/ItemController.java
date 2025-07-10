@@ -2,10 +2,9 @@ package com.example.springboot_tutorial.controller;
 
 import com.example.springboot_tutorial.model.Item;  // Itemクラス
 import com.example.springboot_tutorial.service.ItemService;  // ItemService(newしてる)
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,5 +37,17 @@ public class ItemController {
     @GetMapping("/{id}")
     public Item getItemById(@PathVariable Long id) { // @PathVariableでURLの{id}を受け取る
         return itemService.findById(id);
+    }
+
+    /**
+     * 新しいアイテムを1件登録するAPI
+     * POST /items
+     */
+    @Operation(summary = "新しいアイテムを登録する")  // OpenAPI
+    @PostMapping  // POSTリクエストの処理を行う
+    @ResponseStatus(HttpStatus.CREATED)  // 成功した時、201 Created を返す
+    // JSONで受け取ったデータをJavaオブジェクトに変換し受け取る。itemServiceを経由してidが採番されたItemを受け取る
+    public Item createItem(@RequestBody Item item) {
+        return itemService.createItem(item);
     }
 }

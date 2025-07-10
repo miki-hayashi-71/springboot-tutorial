@@ -26,4 +26,13 @@ public class ItemService {
     public Item findById(Long id) {
         return itemRepository.findById(id).orElse(null);
     }
+
+    /**
+     * 新しいアイテムを1件登録
+     * @param item 登録するアイテム情報
+     * @return データベースに保存されたアイテム情報（ID採番）
+     */
+    public Item createItem(Item item) {
+        return itemRepository.save(item); // saveはIDがなければINSERTを実行する
+    }
 }
