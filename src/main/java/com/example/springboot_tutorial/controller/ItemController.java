@@ -3,6 +3,7 @@ package com.example.springboot_tutorial.controller;
 import com.example.springboot_tutorial.model.Item;  // Itemクラス
 import com.example.springboot_tutorial.service.ItemService;  // ItemService(newしてる)
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,5 +50,17 @@ public class ItemController {
     // JSONで受け取ったデータをJavaオブジェクトに変換し受け取る。itemServiceを経由してidが採番されたItemを受け取る
     public Item createItem(@RequestBody Item item) {
         return itemService.createItem(item);
+    }
+
+    /**
+     * IDを指定してアイテムを1件更新するAPI
+     * PUT /items/{id}
+     */
+    @Operation(summary = "既存のアイテムを更新する") // OpenAPI
+    @PutMapping("/{id}")  // PUTリクエストの処理を行う
+    public Item updateItem(
+            @Parameter(description = "更新対象アイテムのID") @PathVariable Long id,
+            @RequestBody Item item) {
+        return itemService.updateItem(id, item);
     }
 }

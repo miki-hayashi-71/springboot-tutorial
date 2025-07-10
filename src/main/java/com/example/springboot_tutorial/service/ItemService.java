@@ -2,6 +2,7 @@ package com.example.springboot_tutorial.service;
 
 import com.example.springboot_tutorial.model.Item; // Itemクラスを使うため
 import com.example.springboot_tutorial.repository.ItemRepository;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;  // @serviceのアノテーション使用時に必要
 
 import java.util.List;  // コレクションフレームワークのListを使うため
@@ -43,5 +44,24 @@ public class ItemService {
         return itemRepository.save(item); // saveはIDがなければINSERTを実行する
     }
 
+    /**
+     * IDを指定してアイテムを更新する
+     * @param id 更新対象のアイテムID
+     * @param newItemData 更新後のアイテム情報
+     * @return 更新されたアイテム情報
+     */
+    public Item updateItem(Long id, Item newItemData) {
+        // 更新対象のアイテムがあるか確認
+        Item existingItem = itemRepository.findById(id).orElse(null);
 
+        if (existingItem != null){
+            // 既存のアイテム情報を更新
+            existingItem.setName(newItemData.getName());
+            existingItem.setPrice(newItemData.getPrice());
+            // 更新を実行
+            return itemRepository.save(existingItem);
+        }
+        // アイテムが見つからなかった場合はnull
+        return null;
+    }
 }
