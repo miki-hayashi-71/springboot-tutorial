@@ -64,4 +64,12 @@ public class ItemService {
         // アイテムが見つからなかった場合はnull
         return null;
     }
+
+    /**
+     * IDを指定してアイテムを削除する
+     * @param id 削除対象のアイテムID
+     */
+    public void deleteItem(Long id) {
+        itemRepository.deleteById(id);
+    }
 }

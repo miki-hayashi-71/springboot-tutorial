@@ -63,4 +63,16 @@ public class ItemController {
             @RequestBody Item item) {
         return itemService.updateItem(id, item);
     }
+
+    /**
+     * IDを指定してアイテムを1件削除するAPI
+     * DELETE /items/{id}
+     */
+    @Operation(summary = "既存のアイテムを削除する") // OpeAPI
+    @DeleteMapping("/{id}")  // DELETEリクエストの処理を行う
+    @ResponseStatus(HttpStatus.NO_CONTENT)  // 成功した時、204 No Contentを返す
+    public void deleteItem(
+            @Parameter(description = "削除対象アイテムのID") @PathVariable Long id) {
+        itemService.deleteItem(id);
+    }
 }
