@@ -1,5 +1,6 @@
 package com.example.springboot_tutorial.service;
 
+import com.example.springboot_tutorial.exception.ResourceNotFoundException;
 import com.example.springboot_tutorial.model.Item; // Itemクラスを使うため
 import com.example.springboot_tutorial.repository.ItemRepository;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
@@ -28,11 +29,12 @@ public class ItemService {
 
     /**
      * IDを指定してアイテムを1件取得
-     * なけれなnullを返す
+     * なければ例外をスロー
      * GET /items/{id}
      */
     public Item findById(Long id) {
-        return itemRepository.findById(id).orElse(null);
+        return itemRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Item not found with id: " + id));
     }
 
     /**
@@ -51,18 +53,15 @@ public class ItemService {
      * @return 更新されたアイテム情報
      */
     public Item updateItem(Long id, Item newItemData) {
-        // 更新対象のアイテムがあるか確認
-        Item existingItem = itemRepository.findById(id).orElse(null);
+        // 更新対象のアイテムがあるか確認。なければ例外をスロー
+        Item existingItem = itemRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Item not found with id: " + id));
 
-        if (existingItem != null){
-            // 既存のアイテム情報を更新
-            existingItem.setName(newItemData.getName());
-            existingItem.setPrice(newItemData.getPrice());
-            // 更新を実行
-            return itemRepository.save(existingItem);
-        }
-        // アイテムが見つからなかった場合はnull
-        return null;
+        // 既存のアイテム情報を更新
+        existingItem.setName(newItemData.getName());
+        existingItem.setPrice(newItemData.getPrice());
+        // 更新を実行
+        return itemRepository.save(existingItem);
     }
 
     /**
@@ -70,6 +69,11 @@ public class ItemService {
      * @param id 削除対象のアイテムID
      */
     public void deleteItem(Long id) {
+        // 削除するだけなのでオブジェクト本体は不要、idが存在するかだけ分かればいいのでexistsById
+        // existsByIdはvoid型のため,orElseThrowが使えない。存在がfalseの時に例外をスロー
+        if (!itemRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Item to delete not found with id: " + id);
+        }
         itemRepository.deleteById(id);
     }
 }
