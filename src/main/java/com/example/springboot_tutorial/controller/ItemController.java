@@ -25,6 +25,7 @@ public class ItemController {
      * アイテム一覧を取得するAPI
      * GET /items
      */
+    @Operation(summary = "アイテム一覧を取得する")
     @GetMapping
     public List<Item> getItems() {
         // Serviceを呼び出して全アイテムを取得
@@ -35,8 +36,10 @@ public class ItemController {
      * IDを指定してアイテムを1件取得するAPI
      * GET /items/{id}
      */
+    @Operation(summary = "特定のアイテムを1件取得する")
     @GetMapping("/{id}")
-    public Item getItemById(@PathVariable Long id) { // @PathVariableでURLの{id}を受け取る
+    public Item getItemById(
+            @Parameter(description = "取得対象アイテムのID") @PathVariable Long id) { // @PathVariableでURLの{id}を受け取る
         return itemService.findById(id);
     }
 
