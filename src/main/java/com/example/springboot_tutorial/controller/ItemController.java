@@ -57,10 +57,8 @@ public class ItemController {
      */
     @Operation(summary = "既存のアイテムを更新する") // OpenAPI
     @PutMapping("/{id}")  // PUTリクエストの処理を行う
-    public Item updateItem(
-            @Parameter(description = "更新対象アイテムのID") @PathVariable Long id,
-            @RequestBody Item item) {
-        return itemService.updateItem(id, item);
+    public Item updateItem(@RequestBody Item item) {
+        return itemService.updateItem(item.getId(), item);
     }
 
     /**
