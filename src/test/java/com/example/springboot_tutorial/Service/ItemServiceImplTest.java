@@ -29,7 +29,11 @@ public class ItemServiceImplTest {
     void findByIdでIDが存在する場合アイテムを返す() {
 
         // Arrange(準備) itemの作成、id=1Lで呼び出されたらitemオブジェクトが入ったOptionalを返すよう設定
-        Item item = new Item(1L, "テストアイテム", 1000);
+        Item item = Item.builder()
+                .id(1L)
+                .name("テストアイテム")
+                .price(1000)
+                .build();
         when(itemRepository.findById(1L)).thenReturn(Optional.of(item));
 
         // Act(実行)
@@ -57,8 +61,16 @@ public class ItemServiceImplTest {
 
         // Arrange id=nullの新規アイテムとid=1Lの保存済を想定した新規アイテムを作成
         // saveメソッドがItemオブジェクトを引数として呼ばれたらsavedItemを返すよう設定
-        Item newItem = new Item(null, "新規アイテム", 2000);
-        Item savedItem = new Item(1L, "新規アイテム", 2000);
+        Item newItem = Item.builder()
+                .id(null)
+                .name("新規アイテム")
+                .price(2000)
+                .build();
+        Item savedItem = Item.builder()
+                .id(1L)
+                .name("新規アイテム")
+                .price(2000)
+                .build();
         when(itemRepository.save(any(Item.class))).thenReturn(savedItem);
 
         // Act

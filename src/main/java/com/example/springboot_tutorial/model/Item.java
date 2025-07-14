@@ -5,10 +5,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data // ＠@Getter, @Setter, @ToStringなどをまとめて設定
+@Builder
 @AllArgsConstructor // 全フィールドを引数に持つコンストラクター
 @NoArgsConstructor // 引数なしのコンストラクター(JPAに必要)
 @Entity // このクラスがDBのテーブルに対応することを示す
