@@ -4,6 +4,7 @@ import com.example.springboot_tutorial.model.Item;  // Itemクラス
 import com.example.springboot_tutorial.service.ItemService;  // ItemService(newしてる)
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,13 +14,8 @@ import java.util.List;
 @RequestMapping("/items")
 public class ItemController {
 
-    private final ItemService itemService;
-
-    // コンストラクタでItemServiceを受け取る（DI:依存性の注入）
-    // ItemControllerは自分でnewせず、ItemServiceを引数で受け取ることで、ItemServiceがnewしたものを受け取る
-    public ItemController(ItemService itemService) {
-        this.itemService = itemService;
-    }
+    @Autowired
+    private ItemService itemService;
 
     /**
      * アイテム一覧を取得するAPI
