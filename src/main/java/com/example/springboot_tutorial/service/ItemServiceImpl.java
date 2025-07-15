@@ -59,11 +59,9 @@ public class ItemServiceImpl implements ItemService{
      */
     @Override
     public Item updateItem(Long id, Item newItemData) {
-        // 更新対象のアイテムがあるか確認。なければ例外をスロー
-        Item existingItem = itemRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Item not found with id: " + id));
-
-        // 既存のアイテム情報を更新
+        // 存在チェックとオブジェクトの取得
+        Item existingItem = findById(id);
+        // 情報を上書き
         existingItem.setName(newItemData.getName());
         existingItem.setPrice(newItemData.getPrice());
         // 更新を実行
@@ -76,11 +74,9 @@ public class ItemServiceImpl implements ItemService{
      */
     @Override
     public void deleteItem(Long id) {
-        // 削除するだけなのでオブジェクト本体は不要、idが存在するかだけ分かればいいのでexistsById
-        // existsByIdはvoid型のため,orElseThrowが使えない。存在がfalseの時に例外をスロー
-        if (!itemRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Item to delete not found with id: " + id);
-        }
-        itemRepository.deleteById(id);
+        // 存在チェックとオブジェクトの取得
+        Item itemToDelete = findById(id);
+        // 削除を実行
+        itemRepository.delete(itemToDelete);
     }
 }
