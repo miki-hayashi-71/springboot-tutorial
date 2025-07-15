@@ -45,6 +45,9 @@ public class ItemServiceImpl implements ItemService{
      */
     @Override
     public Item createItem(Item item) {
+        if (item.getId() != null) {
+            throw new IllegalArgumentException("A new item cannot have an ID");
+        }
         return itemRepository.save(item); // saveはIDがなければINSERTを実行する
     }
 
