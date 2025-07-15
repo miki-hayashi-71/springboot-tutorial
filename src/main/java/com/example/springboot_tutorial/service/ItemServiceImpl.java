@@ -3,6 +3,7 @@ package com.example.springboot_tutorial.service;
 import com.example.springboot_tutorial.exception.ResourceNotFoundException;
 import com.example.springboot_tutorial.model.Item; // Itemクラスを使うため
 import com.example.springboot_tutorial.repository.ItemRepository;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;  // @serviceのアノテーション使用時に必要
 
 import java.util.List;  // コレクションフレームワークのListを使うため
@@ -48,7 +49,11 @@ public class ItemServiceImpl implements ItemService{
         if (item.getId() != null) {
             throw new IllegalArgumentException("A new item cannot have an ID");
         }
-        return itemRepository.save(item); // saveはIDがなければINSERTを実行する
+        try {
+            return itemRepository.save(item); // saveはIDがなければINSERTを実行する
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Database registration failed.", e);
+        }
     }
 
     /**
@@ -64,8 +69,13 @@ public class ItemServiceImpl implements ItemService{
         // 情報を上書き
         existingItem.setName(newItemData.getName());
         existingItem.setPrice(newItemData.getPrice());
-        // 更新を実行
-        return itemRepository.save(existingItem);
+
+        try {
+            // 更新を実行
+            return itemRepository.save(existingItem);
+        } catch (DataAccessException e){
+            throw new RuntimeException("Database update failed.", e);
+        }
     }
 
     /**
@@ -76,7 +86,12 @@ public class ItemServiceImpl implements ItemService{
     public void deleteItem(Long id) {
         // 存在チェックとオブジェクトの取得
         Item itemToDelete = findById(id);
-        // 削除を実行
-        itemRepository.delete(itemToDelete);
+
+        try {
+            // 削除を実行
+            itemRepository.delete(itemToDelete);
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Database deletion failed.", e);
+        }
     }
 }
