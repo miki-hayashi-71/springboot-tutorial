@@ -64,6 +64,9 @@ public class ItemServiceImpl implements ItemService{
      */
     @Override
     public Item updateItem(Long id, Item newItemData) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID for update cannot be null.");
+        }
         // 存在チェックとオブジェクトの取得
         Item existingItem = findById(id);
         // 情報を上書き
